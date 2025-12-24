@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Upload, X, AlertCircle, Sparkles, RefreshCw, Save, Send, Image, FileText } from 'lucide-react';
 
 // ============================================
@@ -441,25 +441,43 @@ const CreateVOScreen = () => {
     alert('Draft saved successfully!');
   };
 
-  return (
-    <div className="min-h-screen bg-linear-to-br from-gray-50 to-blue-50 pb-24">
-      {/* Header */}
-      <div className="mb-8 px-4 md:px-6 py-8">
-        <h1 className="text-2xl md:text-3xl lg:text-4xl font-black mb-2 bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-          Create New Variation Order
-        </h1>
-        <p className="text-gray-600 font-medium">Document and submit variation order with supporting evidence</p>
-      </div>
+  // Prevent background scroll when this overlay is open
+  useEffect(() => {
+    const original = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    return () => {
+      document.body.style.overflow = original;
+    };
+  }, []);
 
-      {/* Three Column Layout */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 px-4 md:px-6">
-        <EvidenceColumn files={files} setFiles={setFiles} />
-        <VODetailsColumn formData={formData} setFormData={setFormData} />
-        <AISummaryColumn aiSummary={aiSummary} setAiSummary={setAiSummary} filesCount={files.length} />
+  return (
+    <div className="relative min-h-screen bg-linear-to-br from-gray-50 to-blue-50">
+      {/* Scrollable Content */}
+      <div
+        className="overflow-y-auto"
+        style={{
+          height: "calc(100vh - 80px)", // 80px: adjust if your top bar is a different height
+          paddingBottom: "96px" // space for sticky action bar
+        }}
+      >
+        {/* Header */}
+        <div className="mb-8 px-4 md:px-6 py-8">
+          <h1 className="text-2xl md:text-3xl lg:text-4xl font-black mb-2 bg-linear-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            Create New Variation Order
+          </h1>
+          <p className="text-gray-600 font-medium">Document and submit variation order with supporting evidence</p>
+        </div>
+
+        {/* Three Column Layout */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-6 px-4 md:px-6">
+          <EvidenceColumn files={files} setFiles={setFiles} />
+          <VODetailsColumn formData={formData} setFormData={setFormData} />
+          <AISummaryColumn aiSummary={aiSummary} setAiSummary={setAiSummary} filesCount={files.length} />
+        </div>
       </div>
 
       {/* Bottom Action Bar (Sticky) */}
-      <div className="fixed bottom-0 left-0 bg-white border-t-2 border-gray-200 shadow-2xl z-50 w-full">
+      <div className="fixed bottom-0 left-0 w-full bg-white border-t-2 border-gray-200 shadow-2xl z-50">
         <div className="px-4 md:px-6 py-4 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2 text-sm text-gray-600 font-semibold">
             <span className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse"></span>

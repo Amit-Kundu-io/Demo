@@ -575,7 +575,7 @@ const ProjectsListPage = () => {
               {/* Footer */}
               <div className="flex items-center justify-end gap-3 p-6 border-t border-gray-200 bg-gray-50">
                 <button 
-                  onClick={() =>  navigate(`/projects/${projects.id}`, { state: projects })}
+                  onClick={() =>  setIsNewProjectFormOpen(false)}
                   className="px-6 py-2.5 text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors font-semibold"
                 >
                   Cancel
