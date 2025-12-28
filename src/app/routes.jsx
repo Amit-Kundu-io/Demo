@@ -3,7 +3,7 @@ import MainLayout from "../layouts/MainLayout";
 import Projects from "../features/Projects/Projects";
 import Settings from "../features/settings/Settings";
 import Team from "../features/Team_management/Team"
-import Approval from "../Approval/Approval";
+import Approval from "../features/Approval/Approval";
 import CompanyDetails from "../features/Projects/CompanyDetails";
 
 export default function AppRoutes() {

@@ -1,528 +1,244 @@
+import React, { useState } from "react";
+import {
+  Plus,
+  Search,
+  LayoutGrid,
+  List,
+  User,
+  X,
+} from "lucide-react";
 
-// export default function Team() {
-//   return (
-//     <div className="p-4 md:p-6 lg:p-8">
-//       <h2 className="text-2xl md:text-3xl lg:text-4xl font-bold text-gray-900 mb-2">Team Management</h2>
-//       <p className="text-gray-600 mb-4">This is the Team Management page content.</p>
-//       <p className="text-gray-500">in maintenance mode</p>
-//     </div>
-//   );
-// }
-
-import React, { useState } from 'react';
-import { Building2, Bell, Search, Filter, Plus, Edit, Trash2, UserPlus, Shield, Users, Mail, Phone, Calendar, Check, X, ChevronDown, Download, Upload } from 'lucide-react';
-
-// SCREEN 10: Company Management (Users & Roles)
-const CompanyScreen = () => {
-  const [showAddUserModal, setShowAddUserModal] = useState(false);
-  const [showEditUserModal, setShowEditUserModal] = useState(false);
-  const [showRolesModal, setShowRolesModal] = useState(false);
-  const [selectedUser, setSelectedUser] = useState(null);
-  const [searchQuery, setSearchQuery] = useState('');
-  const [filterRole, setFilterRole] = useState('all');
-  const [filterStatus, setFilterStatus] = useState('all');
+const TeamPage = () => {
+  const [viewMode, setViewMode] = useState("table");
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isAddUserOpen, setIsAddUserOpen] = useState(false);
 
   const users = [
-    {
-      id: 1,
-      name: 'Sarah Chen',
-      email: 'sarah.chen@tendtrix.com',
-      phone: '+971 50 123 4567',
-      role: 'Architect',
-      status: 'Active',
-      assignedProjects: ['Marina Bay Construction', 'Downtown Tower'],
-      joinDate: 'Jan 15, 2023',
-      lastActive: '2 min ago',
-      avatar: 'SC'
-    },
-    {
-      id: 2,
-      name: 'David Lee',
-      email: 'david.lee@tendtrix.com',
-      phone: '+971 50 234 5678',
-      role: 'Quantity Surveyor',
-      status: 'Active',
-      assignedProjects: ['Marina Bay Construction', 'Downtown Tower', 'Residential Complex A'],
-      joinDate: 'Feb 20, 2023',
-      lastActive: '10 min ago',
-      avatar: 'DL'
-    },
-    {
-      id: 3,
-      name: 'John Smith',
-      email: 'john.smith@tendtrix.com',
-      phone: '+971 50 345 6789',
-      role: 'Site Engineer',
-      status: 'Active',
-      assignedProjects: ['Marina Bay Construction'],
-      joinDate: 'Mar 10, 2023',
-      lastActive: '1 hour ago',
-      avatar: 'JS'
-    },
-    {
-      id: 4,
-      name: 'Mike Johnson',
-      email: 'mike.johnson@tendtrix.com',
-      phone: '+971 50 456 7890',
-      role: 'Project Manager',
-      status: 'Active',
-      assignedProjects: ['Marina Bay Construction', 'Downtown Tower'],
-      joinDate: 'Jan 5, 2023',
-      lastActive: '3 hours ago',
-      avatar: 'MJ'
-    },
-    {
-      id: 5,
-      name: 'Emma Davis',
-      email: 'emma.davis@tendtrix.com',
-      phone: '+971 50 567 8901',
-      role: 'Site Engineer',
-      status: 'Active',
-      assignedProjects: ['Downtown Tower', 'Residential Complex A'],
-      joinDate: 'Apr 12, 2023',
-      lastActive: '5 hours ago',
-      avatar: 'ED'
-    },
-    {
-      id: 6,
-      name: 'Tom Wilson',
-      email: 'tom.wilson@tendtrix.com',
-      phone: '+971 50 678 9012',
-      role: 'Contractor',
-      status: 'Inactive',
-      assignedProjects: ['Residential Complex A'],
-      joinDate: 'May 8, 2023',
-      lastActive: '2 days ago',
-      avatar: 'TW'
-    },
-    {
-      id: 7,
-      name: 'Lisa Anderson',
-      email: 'lisa.anderson@tendtrix.com',
-      phone: '+971 50 789 0123',
-      role: 'Architect',
-      status: 'Active',
-      assignedProjects: ['Downtown Tower'],
-      joinDate: 'Jun 15, 2023',
-      lastActive: '1 day ago',
-      avatar: 'LA'
-    }
+    { id: 1, name: "Aarav Sharma", email: "aarav.sharma@example.com", role: "Admin", status: "Active", projects: 4 },
+    { id: 2, name: "Priya Verma", email: "priya.verma@example.com", role: "Manager", status: "Active", projects: 6 },
+    { id: 3, name: "Rohan Das", email: "rohan.das@example.com", role: "Editor", status: "Inactive", projects: 2 },
+    { id: 4, name: "Sneha Gupta", email: "sneha.gupta@example.com", role: "Viewer", status: "Active", projects: 1 },
+    { id: 5, name: "Ankit Roy", email: "ankit.roy@example.com", role: "Support", status: "Blocked", projects: 0 },
   ];
 
-  const roles = [
-    { name: 'Owner', color: 'purple', permissions: ['All permissions', 'Final approval authority', 'Financial oversight'] },
-    { name: 'Project Manager', color: 'blue', permissions: ['Project oversight', 'Team coordination', 'Report access'] },
-    { name: 'Architect', color: 'green', permissions: ['Technical validation', 'Drawing approval', 'Design review'] },
-    { name: 'Quantity Surveyor', color: 'yellow', permissions: ['Cost estimation', 'VO pricing', 'Budget tracking'] },
-    { name: 'Site Engineer', color: 'orange', permissions: ['VO submission', 'Site documentation', 'RFI creation'] },
-    { name: 'Contractor', color: 'red', permissions: ['Limited access', 'Document view', 'Communication'] }
-  ];
+  const filteredUsers = users.filter(
+    (u) =>
+      u.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      u.email.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
-  const getRoleBadgeColor = (role) => {
-    const colors = {
-      'Owner': 'bg-purple-100 text-purple-700 border-purple-200',
-      'Project Manager': 'bg-blue-100 text-blue-700 border-blue-200',
-      'Architect': 'bg-green-100 text-green-700 border-green-200',
-      'Quantity Surveyor': 'bg-yellow-100 text-yellow-700 border-yellow-200',
-      'Site Engineer': 'bg-orange-100 text-orange-700 border-orange-200',
-      'Contractor': 'bg-red-100 text-red-700 border-red-200'
+  /* ===== UI BADGES ===== */
+  const StatusBadge = ({ status }) => {
+    const map = {
+      Active: "bg-green-100 text-green-700",
+      Inactive: "bg-gray-100 text-gray-600",
+      Blocked: "bg-red-100 text-red-700",
     };
-    return colors[role] || 'bg-gray-100 text-gray-700 border-gray-200';
+    return (
+      <span className={`px-3 py-1 rounded-full text-xs font-medium ${map[status]}`}>
+        ● {status}
+      </span>
+    );
   };
 
-  const handleEditUser = (user) => {
-    setSelectedUser(user);
-    setShowEditUserModal(true);
-  };
+  const Avatar = ({ name }) => (
+    <div className="w-10 h-10 rounded-full bg-linear-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold">
+      {name.charAt(0)}
+    </div>
+  );
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* <TopNavBar /> */}
-      
-      <div className="max-w-7xl mx-auto px-6 py-8">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Company Management</h1>
-          <p className="text-gray-600">Manage users, roles, and permissions across your organization</p>
+    <div className="min-h-screen bg-slate-50 overflow-x-hidden">
+      <div className="max-w-screen-2xl mx-auto px-6 py-8">
+
+        {/* ===== HEADER ===== */}
+        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-10">
+          <div>
+            <h1 className="text-3xl font-bold text-slate-900">Team Members</h1>
+            <p className="text-slate-500 mt-1">
+              Manage your organization users and permissions
+            </p>
+          </div>
+
+          <button
+            onClick={() => setIsAddUserOpen(true)}
+            className="flex items-center gap-2 px-5 py-3 bg-blue-600 text-white rounded-xl shadow hover:bg-blue-700 transition"
+          >
+            <Plus className="w-5 h-5" />
+            Add Member
+          </button>
         </div>
 
-        {/* Summary Cards */}
-        <div className="grid grid-cols-4 gap-4 mb-6">
-          <div className="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
-            <div className="flex items-center justify-between mb-2">
-              <p className="text-sm font-medium text-gray-600">Total Users</p>
-              <Users className="w-5 h-5 text-blue-600" />
+        {/* ===== TOOLBAR ===== */}
+        <div className="bg-white rounded-2xl border-none shadow-sm mb-6">
+          <div className="p-5 flex flex-col md:flex-row justify-between gap-4">
+            <div className="relative w-full md:w-96">
+              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+              <input
+                className="w-full pl-10 pr-4 py-2.5 border rounded-xl text-sm focus:ring-2 focus:ring-blue-500"
+                placeholder="Search team member..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
             </div>
-            <p className="text-3xl font-bold text-gray-900">{users.length}</p>
-            <p className="text-sm text-green-600 mt-1">+2 this month</p>
-          </div>
-          
-          <div className="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
-            <div className="flex items-center justify-between mb-2">
-              <p className="text-sm font-medium text-gray-600">Active Users</p>
-              <Check className="w-5 h-5 text-green-600" />
-            </div>
-            <p className="text-3xl font-bold text-gray-900">{users.filter(u => u.status === 'Active').length}</p>
-            <p className="text-sm text-gray-500 mt-1">86% active rate</p>
-          </div>
-          
-          <div className="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
-            <div className="flex items-center justify-between mb-2">
-              <p className="text-sm font-medium text-gray-600">Roles</p>
-              <Shield className="w-5 h-5 text-purple-600" />
-            </div>
-            <p className="text-3xl font-bold text-gray-900">{roles.length}</p>
-            <button onClick={() => setShowRolesModal(true)} className="text-sm text-blue-600 hover:underline mt-1">
-              Manage Roles
-            </button>
-          </div>
-          
-          <div className="bg-white rounded-xl p-5 border border-gray-200 shadow-sm">
-            <div className="flex items-center justify-between mb-2">
-              <p className="text-sm font-medium text-gray-600">Projects</p>
-              <Building2 className="w-5 h-5 text-yellow-600" />
-            </div>
-            <p className="text-3xl font-bold text-gray-900">3</p>
-            <p className="text-sm text-gray-500 mt-1">Active projects</p>
-          </div>
-        </div>
 
-        {/* Actions and Filters Bar */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 p-5 mb-6">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex-1 flex items-center gap-3">
-              {/* Search */}
-              <div className="relative flex-1 max-w-md">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-                <input
-                  type="text"
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  placeholder="Search users by name or email..."
-                  className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                />
-              </div>
-
-              {/* Role Filter */}
-              <select 
-                value={filterRole}
-                onChange={(e) => setFilterRole(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            <div className="flex bg-slate-100 p-1 rounded-xl">
+              <button
+                onClick={() => setViewMode("table")}
+                className={`px-4 py-2 rounded-lg transition ${
+                  viewMode === "table" ? "bg-white shadow" : ""
+                }`}
               >
-                <option value="all">All Roles</option>
-                <option value="owner">Owner</option>
-                <option value="pm">Project Manager</option>
-                <option value="architect">Architect</option>
-                <option value="qs">Quantity Surveyor</option>
-                <option value="engineer">Site Engineer</option>
-                <option value="contractor">Contractor</option>
-              </select>
-
-              {/* Status Filter */}
-              <select 
-                value={filterStatus}
-                onChange={(e) => setFilterStatus(e.target.value)}
-                className="px-4 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                <List className="w-4 h-4" />
+              </button>
+              <button
+                onClick={() => setViewMode("card")}
+                className={`px-4 py-2 rounded-lg transition ${
+                  viewMode === "card" ? "bg-white shadow" : ""
+                }`}
               >
-                <option value="all">All Status</option>
-                <option value="active">Active</option>
-                <option value="inactive">Inactive</option>
-              </select>
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex items-center gap-3">
-              <button className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition flex items-center gap-2 text-sm font-medium">
-                <Download className="w-4 h-4" />
-                Export
-              </button>
-              <button className="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-50 transition flex items-center gap-2 text-sm font-medium">
-                <Upload className="w-4 h-4" />
-                Import
-              </button>
-              <button 
-                onClick={() => setShowAddUserModal(true)}
-                className="px-5 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition flex items-center gap-2 font-medium shadow-md"
-              >
-                <Plus className="w-4 h-4" />
-                Add User
+                <LayoutGrid className="w-4 h-4" />
               </button>
             </div>
           </div>
         </div>
 
-        {/* Users Table */}
-        <div className="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
-          <table className="w-full">
-            <thead className="bg-gray-50 border-b border-gray-200">
-              <tr>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">User</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Role</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Contact</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Assigned Projects</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Status</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Last Active</th>
-                <th className="px-6 py-4 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-gray-200">
-              {users.map(user => (
-                <tr key={user.id} className="hover:bg-gray-50 transition">
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-full bg-linear-to-br from-blue-500 to-purple-500 flex items-center justify-center text-white font-semibold text-sm shadow">
-                        {user.avatar}
-                      </div>
-                      <div>
-                        <p className="font-semibold text-gray-900">{user.name}</p>
-                        <p className="text-xs text-gray-500">Joined {user.joinDate}</p>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold border ${getRoleBadgeColor(user.role)}`}>
-                      {user.role}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="text-sm">
-                      <div className="flex items-center gap-1.5 text-gray-700 mb-1">
-                        <Mail className="w-3.5 h-3.5 text-gray-400" />
-                        <span className="truncate">{user.email}</span>
-                      </div>
-                      <div className="flex items-center gap-1.5 text-gray-600">
-                        <Phone className="w-3.5 h-3.5 text-gray-400" />
-                        <span>{user.phone}</span>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-1">
-                      <span className="text-sm font-semibold text-blue-600">{user.assignedProjects.length}</span>
-                      <span className="text-sm text-gray-600">projects</span>
-                    </div>
-                    <p className="text-xs text-gray-500 truncate max-w-xs">
-                      {user.assignedProjects.join(', ')}
-                    </p>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                      user.status === 'Active' 
-                        ? 'bg-green-100 text-green-700' 
-                        : 'bg-gray-100 text-gray-700'
-                    }`}>
-                      {user.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4 text-sm text-gray-600">
-                    {user.lastActive}
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="flex items-center gap-2">
-                      <button 
-                        onClick={() => handleEditUser(user)}
-                        className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg transition"
-                        title="Edit user"
-                      >
-                        <Edit className="w-4 h-4" />
-                      </button>
-                      <button 
-                        className="p-2 text-red-600 hover:bg-red-50 rounded-lg transition"
-                        title="Delete user"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        {/* ===== TABLE VIEW ===== */}
+        
+        {viewMode === "table" && (
+          <div className="bg-white rounded-2xl shadow-sm ring-1 ring-slate-200 overflow-hidden">
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm">
+                <thead className="bg-slate-50/80 backdrop-blur sticky top-0 z-10">
+                  <tr>
+                    <th className="px-6 py-4 text-left font-semibold text-slate-600">Member</th>
+                    <th className="px-6 py-4 text-left font-semibold text-slate-600">Role</th>
+                    <th className="px-6 py-4 text-left font-semibold text-slate-600">Status</th>
+                    <th className="px-6 py-4 text-left font-semibold text-slate-600">Projects</th>
+                    <th className="px-6 py-4 text-right font-semibold text-slate-600">Action</th>
+                  </tr>
+                </thead>
 
-        {/* Pagination */}
-        <div className="mt-6 flex items-center justify-between">
-          <p className="text-sm text-gray-600">
-            Showing <span className="font-medium">1-{users.length}</span> of <span className="font-medium">{users.length}</span> users
-          </p>
-          <div className="flex gap-2">
-            <button className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition">
-              Previous
-            </button>
-            <button className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium">
-              1
-            </button>
-            <button className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium text-gray-700 hover:bg-gray-50 transition">
-              Next
-            </button>
-          </div>
-        </div>
-      </div>
+                <tbody className="divide-y divide-slate-100">
+                  {filteredUsers.map((u) => (
+                    <tr
+                      key={u.id}
+                      className="group hover:bg-slate-50 transition"
+                    >
+                      {/* MEMBER */}
+                      <td className="px-6 py-4 flex items-center gap-3">
+                        <div className="w-10 h-10 rounded-full bg-linear-to-br from-blue-500 to-indigo-600 flex items-center justify-center text-white font-bold shadow">
+                          {u.name.charAt(0)}
+                        </div>
+                        <div>
+                          <p className="font-semibold text-slate-900">{u.name}</p>
+                          <p className="text-xs text-slate-500">{u.email}</p>
+                        </div>
+                      </td>
 
-      {/* Add User Modal */}
-      {showAddUserModal && (
-        <Modal onClose={() => setShowAddUserModal(false)} title="Add New User">
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">First Name</label>
-                <input type="text" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="John" />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-2">Last Name</label>
-                <input type="text" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="Doe" />
-              </div>
-            </div>
-            
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Email</label>
-              <input type="email" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="john.doe@company.com" />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Phone</label>
-              <input type="tel" className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" placeholder="+971 50 123 4567" />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Role</label>
-              <select className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent">
-                <option>Select role</option>
-                {roles.map(role => (
-                  <option key={role.name} value={role.name}>{role.name}</option>
-                ))}
-              </select>
-            </div>
-            
-            <div>
-              <label className="block text-sm font-semibold text-gray-700 mb-2">Assign Projects</label>
-              <select multiple className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent" size="3">
-                <option>Marina Bay Construction</option>
-                <option>Downtown Tower</option>
-                <option>Residential Complex A</option>
-              </select>
-              <p className="text-xs text-gray-500 mt-1">Hold Ctrl/Cmd to select multiple</p>
-            </div>
+                      {/* ROLE */}
+                      <td className="px-6 py-4">
+                        <span className="px-3 py-1 rounded-full text-xs font-medium bg-slate-100 text-slate-700">
+                          {u.role}
+                        </span>
+                      </td>
 
-            <div className="flex gap-3 pt-4">
-              <button onClick={() => setShowAddUserModal(false)} className="flex-1 px-4 py-2.5 border-2 border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-50 transition">
-                Cancel
-              </button>
-              <button className="flex-1 px-4 py-2.5 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition">
-                Add User
-              </button>
-            </div>
-          </div>
-        </Modal>
-      )}
+                      {/* STATUS */}
+                      <td className="px-6 py-4">
+                        <span
+                          className={`inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-medium
+                            ${
+                              u.status === "Active"
+                                ? "bg-green-100 text-green-700"
+                                : u.status === "Blocked"
+                                ? "bg-red-100 text-red-700"
+                                : "bg-gray-100 text-gray-600"
+                            }
+                          `}
+                        >
+                          <span className="w-2 h-2 rounded-full bg-current" />
+                          {u.status}
+                        </span>
+                      </td>
 
-      {/* Roles Management Modal */}
-      {showRolesModal && (
-        <Modal onClose={() => setShowRolesModal(false)} title="Manage Roles & Permissions" size="large">
-          <div className="space-y-4">
-            {roles.map(role => (
-              <div key={role.name} className="p-5 border-2 border-gray-200 rounded-xl hover:border-gray-300 transition">
-                <div className="flex items-start justify-between mb-3">
-                  <div className="flex items-center gap-3">
-                    <Shield className={`w-6 h-6 text-${role.color}-600`} />
-                    <div>
-                      <h4 className="font-bold text-gray-900">{role.name}</h4>
-                      <p className="text-sm text-gray-600">{users.filter(u => u.role === role.name).length} users</p>
-                    </div>
-                  </div>
-                  <button className="text-blue-600 hover:text-blue-700 text-sm font-medium">
-                    Edit Permissions
-                  </button>
-                </div>
-                <div className="space-y-1">
-                  {role.permissions.map((perm, idx) => (
-                    <div key={idx} className="flex items-center gap-2 text-sm">
-                      <Check className="w-4 h-4 text-green-600 shrink-0" />
-                      <span className="text-gray-700">{perm}</span>
-                    </div>
+                      {/* PROJECTS */}
+                      <td className="px-6 py-4 font-semibold text-slate-800">
+                        {u.projects}
+                      </td>
+
+                      {/* ACTION */}
+                      <td className="px-6 py-4 text-right">
+                        <button className="opacity-0 group-hover:opacity-100 transition text-sm text-blue-600 hover:underline">
+                          Manage
+                        </button>
+                      </td>
+                    </tr>
                   ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        )}
+
+
+        {/* ===== CARD VIEW ===== */}
+        {viewMode === "card" && (
+          <div className="grid sm:grid-cols-2 xl:grid-cols-3 gap-6">
+            {filteredUsers.map((u) => (
+              <div
+                key={u.id}
+                className="bg-white border rounded-2xl p-6 hover:shadow-lg transition"
+              >
+                <div className="flex justify-between mb-4">
+                  <Avatar name={u.name} />
+                  <StatusBadge status={u.status} />
+                </div>
+
+                <h3 className="font-bold text-lg text-slate-800">{u.name}</h3>
+                <p className="text-sm text-slate-500">{u.email}</p>
+
+                <div className="mt-5 flex justify-between items-center">
+                  <span className="text-sm font-medium">{u.role}</span>
+                  <span className="text-sm font-semibold">{u.projects} projects</span>
                 </div>
               </div>
             ))}
           </div>
-        </Modal>
+        )}
+      </div>
+
+      {/* ===== SLIDE PANEL ===== */}
+      {isAddUserOpen && (
+        <div className="fixed inset-0 z-50 overflow-x-hidden">
+          <div
+            className="absolute inset-0 bg-black/40"
+            onClick={() => setIsAddUserOpen(false)}
+          />
+          <div className="absolute right-0 top-0 h-full w-full max-w-md bg-white shadow-2xl">
+            <div className="p-6 border-b flex justify-between">
+              <h2 className="text-xl font-bold">Add Team Member</h2>
+              <button onClick={() => setIsAddUserOpen(false)}>
+                <X />
+              </button>
+            </div>
+            <div className="p-6 space-y-4">
+              <input className="w-full px-4 py-3 border rounded-xl" placeholder="Full Name" />
+              <input className="w-full px-4 py-3 border rounded-xl" placeholder="Email" />
+              <select className="w-full px-4 py-3 border rounded-xl">
+                <option>Select Role</option>
+                <option>Admin</option>
+                <option>Manager</option>
+                <option>Editor</option>
+              </select>
+              <button className="w-full py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 transition">
+                Create Member
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
 };
 
-// Modal Component
-const Modal = ({ onClose, title, children, size = 'default' }) => {
-  const sizeClasses = {
-    default: 'max-w-md',
-    large: 'max-w-2xl'
-  };
-
-  return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-      <div className={`bg-white rounded-2xl shadow-2xl w-full ${sizeClasses[size]} max-h-[90vh] overflow-y-auto`}>
-        <div className="sticky top-0 bg-white border-b border-gray-200 px-6 py-4 flex items-center justify-between">
-          <h3 className="text-xl font-bold text-gray-900">{title}</h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600 transition">
-            <X className="w-6 h-6" />
-          </button>
-        </div>
-        <div className="p-6">
-          {children}
-        </div>
-      </div>
-    </div>
-  );
-};
-
-// Top Navigation Bar Component
-// const TopNavBar = () => {
-//   const menuItems = [
-//     { name: 'Projects', active: false },
-//     { name: 'Reports', active: false },
-//     { name: 'Messages', active: false },
-//     { name: 'Company', active: true },
-//     { name: 'Settings', active: false }
-//   ];
-
-//   return (
-//     <nav className="bg-white border-b border-gray-200 sticky top-0 z-40 shadow-sm">
-//       <div className="max-w-7xl mx-auto px-6">
-//         <div className="flex items-center justify-between h-16">
-//           <div className="flex items-center gap-3">
-//             <div className="flex items-center justify-center w-10 h-10 bg-blue-600 rounded-lg shadow-md">
-//               <Building2 className="w-6 h-6 text-white" />
-//             </div>
-//             <span className="text-xl font-bold text-gray-900">TendTrix</span>
-//           </div>
-
-//           <div className="flex items-center gap-1">
-//             {menuItems.map((item, idx) => (
-//               <button
-//                 key={idx}
-//                 className={`px-4 py-2 rounded-lg font-medium text-sm transition ${
-//                   item.active ? 'bg-blue-50 text-blue-700' : 'text-gray-600 hover:bg-gray-50'
-//                 }`}
-//               >
-//                 {item.name}
-//               </button>
-//             ))}
-//           </div>
-
-//           <div className="flex items-center gap-3">
-//             <button className="relative p-2 text-gray-600 hover:bg-gray-100 rounded-lg transition">
-//               <Bell className="w-5 h-5" />
-//               <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
-//             </button>
-//             <div className="w-10 h-10 bg-linear-to-br from-blue-500 to-purple-500 rounded-full flex items-center justify-center text-white font-semibold text-sm shadow-md">
-//               AD
-//             </div>
-//           </div>
-//         </div>
-//       </div>
-//     </nav>
-//   );
-// };
-
-export default CompanyScreen;
-
+export default TeamPage;
