@@ -51,7 +51,7 @@ const Sidebar = ({ isOpen, onClose }) => {
                 ${
                   isActive
                     ? "bg-teal-50 text-teal-600 font-semibold"
-                    : "text-gray-600 hover:bg-gray-100"
+                    : "text-gray-600 hover:bg-gray-100 pl-2 "
                 }`
               }
             >

@@ -198,7 +198,7 @@ export default function ApprovalWorkflow() {
       </div>
 
       {/* Second Item Preview */}
-      <div className="bg-white rounded-lg shadow p-6 mt-6">
+      {/* <div className="bg-white rounded-lg shadow p-6 mt-6">
         <div className="flex items-center gap-3">
           <span className="px-3 py-1 bg-yellow-100 text-yellow-800 rounded-full text-sm font-medium flex items-center gap-1">
             <FileText size={16} />
@@ -209,7 +209,7 @@ export default function ApprovalWorkflow() {
             MEDIUM
           </span>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

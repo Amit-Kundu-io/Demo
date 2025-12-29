@@ -7,7 +7,7 @@ export default function MainLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-screen flex flex-col ">
       {/* Top Bar */}
       <TopBar onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
 

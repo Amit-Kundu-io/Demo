@@ -36,7 +36,7 @@ export default function SettingsProfilePage() {
 
   /* ===============================
      SAVE NAME CHANGES (SYNC TOPBAR)
-  ================================ */
+    ================================ */
   useEffect(() => {
     localStorage.setItem(
       'userName',
