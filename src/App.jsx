@@ -7,7 +7,9 @@ import Settings from "./features/settings/Settings";
 import Team from "./features/Team_management/Team";
 import Approval from "./Approval/Approval";
 import CompanyDetails from "./features/Projects/CompanyDetails";
+import Login from "./Login/Login"
 import { useState } from "react";
+import Signup from "./Sign in/SignIn";
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);

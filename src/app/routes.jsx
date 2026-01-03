@@ -5,6 +5,9 @@ import Settings from "../features/settings/Settings";
 import Team from "../features/Team_management/Team"
 import Approval from "../features/Approval/Approval";
 import CompanyDetails from "../features/Projects/CompanyDetails";
+import Login from "../Login/Login";
+import Signup from "../Sign in/SignIn";
+import Auth from "../components/Auth"
 
 export default function AppRoutes() {
   return (
@@ -17,6 +20,9 @@ export default function AppRoutes() {
         <Route path="/team" element={<Team />} />
         <Route path="/approvals" element={<Approval />} />
       </Route>
+      <Route path="/login" element={<Login />} />
+      <Route path="/signup" element={<Signup />} />
+      <Route path="/Auth" element={<Auth/>} />
     </Routes>
   );
 }
