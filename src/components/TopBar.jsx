@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Bell, MoreHorizontal, User, LogOut, Settings } from 'lucide-react';
+import { Bell, User, LogOut, Settings, Menu } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const TopNavBar = ({ onMenuClick }) => {
@@ -49,7 +49,7 @@ const TopNavBar = ({ onMenuClick }) => {
   /* ================= LOGOUT ================= */
   const handleLogout = () => {
     localStorage.clear();
-    navigate('/login'); // change route if needed
+    navigate('/login');
   };
 
   return (
@@ -58,26 +58,29 @@ const TopNavBar = ({ onMenuClick }) => {
         <div className="flex items-center justify-between h-12 sm:h-14 lg:h-16">
 
           {/* LEFT */}
-          <div className="flex items-center gap-1.5 sm:gap-2 lg:gap-3">
+          <div className="flex items-center gap-1.5 sm:gap-2 lg:gap-3 min-w-0">
             <button
               onClick={onMenuClick}
               className="md:hidden p-1 sm:p-1.5 lg:p-2 text-gray-600 hover:bg-gray-100 rounded-lg"
             >
-              <MoreHorizontal className="w-4 h-4 sm:w-5 sm:h-5" />
+              <Menu className="w-4 h-4 sm:w-5 sm:h-5" />
             </button>
 
-            <div className="flex items-center gap-1.5 sm:gap-2 lg:gap-3">
-              <div className="bg-teal-400 text-white font-bold px-1.5 py-0.5 sm:px-2 sm:py-1 lg:px-3 lg:py-2 rounded-md sm:rounded-lg text-xs sm:text-sm lg:text-base">
+            <div className="flex items-center gap-1.5 sm:gap-2 lg:gap-3 min-w-0">
+              <div className="bg-teal-400 text-white font-bold px-1.5 py-0.5 sm:px-2 sm:py-1 lg:px-3 lg:py-2 rounded-md sm:rounded-lg text-xs sm:text-sm lg:text-base shrink-0">
                 TT
               </div>
-              <span className="text-sm sm:text-lg lg:text-xl font-bold text-gray-900 truncate">
+              <span className="text-sm sm:text-lg lg:text-xl font-bold text-gray-900 truncate max-w-30 sm:max-w-none">
                 TendTrix
               </span>
             </div>
           </div>
 
           {/* RIGHT */}
-          <div className="flex items-center gap-1.5 sm:gap-2 lg:gap-3 relative" ref={profileRef}>
+          <div
+            className="flex items-center gap-1.5 sm:gap-2 lg:gap-3 relative shrink-0"
+            ref={profileRef}
+          >
             <button className="relative p-1 sm:p-1.5 lg:p-2 text-gray-600 hover:bg-gray-100 rounded-lg">
               <Bell className="w-4 h-4 sm:w-5 sm:h-5" />
               <span className="absolute top-0.5 right-0.5 sm:top-1 sm:right-1 w-1.5 h-1.5 sm:w-2 sm:h-2 bg-red-500 rounded-full"></span>
@@ -101,9 +104,9 @@ const TopNavBar = ({ onMenuClick }) => {
               )}
             </button>
 
-            {/* ================= PROFILE DROPDOWN ================= */}
+            {/* PROFILE DROPDOWN */}
             {showProfileMenu && (
-              <div className="absolute right-0 top-10 sm:top-12 lg:top-14 w-44 sm:w-48 lg:w-56 bg-white rounded-lg sm:rounded-xl shadow-lg border border-gray-100 overflow-hidden z-50">
+              <div className="absolute right-0 top-10 sm:top-12 lg:top-14 w-44 sm:w-48 lg:w-56 bg-white rounded-lg sm:rounded-xl shadow-lg border border-gray-100 overflow-hidden z-50 max-w-[90vw]">
 
                 {/* USER INFO */}
                 <div className="px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 lg:py-3 border-b">

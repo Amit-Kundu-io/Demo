@@ -89,8 +89,8 @@ export default function SettingsProfilePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 py-4 sm:py-6 lg:py-8 px-4">
-      <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-sm p-4 sm:p-6 lg:p-8">
+    <div className="min-h-screen bg-gray-50 py-2 sm:py-2 lg:py-4 px-2">
+      <div className="max-w-6xl mx-auto bg-white rounded-lg shadow-sm p-2 sm:p-2 lg:p-6">
 
         {/* ================= Profile Picture ================= */}
         <div className="mb-6 sm:mb-8">

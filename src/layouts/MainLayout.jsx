@@ -7,17 +7,26 @@ export default function MainLayout() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 
   return (
-    <div className="h-screen flex flex-col ">
+    <div className="h-screen flex flex-col">
       {/* Top Bar */}
-      <TopBar onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
+      <TopBar onMenuClick={() => setSidebarOpen(prev => !prev)} />
 
       {/* Body */}
-      <div className="flex flex-1">
+      <div className="flex flex-1 relative">
         {/* Sidebar */}
-        <SideBar isOpen={sidebarOpen} onClose={() => setSidebarOpen(false)} />
+        <SideBar
+          isOpen={sidebarOpen}
+          onClose={() => setSidebarOpen(false)}
+        />
 
         {/* Page Content */}
-        <div className={`flex-1 p-5 transition-all duration-300 ${sidebarOpen ? 'ml-64' : 'ml-0'} md:ml-64`}>
+        <div
+          className={`
+            flex-1 p-4 sm:p-5 overflow-auto
+            transition-all duration-300
+            md:ml-64
+          `}
+        >
           <Outlet />
         </div>
       </div>

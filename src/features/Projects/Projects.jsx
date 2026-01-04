@@ -12,6 +12,8 @@ const ProjectsListPage = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [isNewProjectFormOpen, setIsNewProjectFormOpen] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 6;
   
 
 
@@ -159,6 +161,16 @@ const ProjectsListPage = () => {
     return matchesSearch && matchesFilter;
   });
 
+  // Pagination
+  const totalPages = Math.ceil(filteredProjects.length / itemsPerPage);
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const paginatedProjects = filteredProjects.slice(startIndex, startIndex + itemsPerPage);
+
+  // Reset to page 1 when filters change
+  React.useEffect(() => {
+    setCurrentPage(1);
+  }, [searchQuery, filterStatus]);
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Main Content */}
@@ -240,7 +252,7 @@ const ProjectsListPage = () => {
         {/* Results count */}
         <div className="mb-4">
           <p className="text-sm text-gray-600">
-            Showing <span className="font-semibold text-gray-900">{filteredProjects.length}</span> of <span className="font-semibold text-gray-900">{projects.length}</span> projects
+            Showing <span className="font-semibold text-gray-900">{startIndex + 1}-{Math.min(startIndex + itemsPerPage, filteredProjects.length)}</span> of <span className="font-semibold text-gray-900">{filteredProjects.length}</span> projects
           </p>
         </div>
 
@@ -272,7 +284,7 @@ const ProjectsListPage = () => {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {filteredProjects.map((project) => (
+                  {paginatedProjects.map((project) => (
                     <tr 
                       key={project.id} 
                       className="hover:bg-gray-50 transition-colors cursor-pointer"
@@ -337,7 +349,7 @@ const ProjectsListPage = () => {
             </div>
 
             {/* Empty state */}
-            {filteredProjects.length === 0 && (
+            {paginatedProjects.length === 0 && (
               <div className="text-center py-16">
                 <Building2 className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">No projects found</h3>
@@ -356,7 +368,7 @@ const ProjectsListPage = () => {
         {/* Card View */}
         {viewMode === 'card' && (
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
-            {filteredProjects.map((project) => (
+            {paginatedProjects.map((project) => (
               <div 
                 key={project.id} 
                 className="bg-white rounded-xl border-2 border-gray-200 hover:border-blue-300 hover:shadow-lg transition-all duration-200 overflow-hidden group"
@@ -442,7 +454,7 @@ const ProjectsListPage = () => {
             ))}
 
             {/* Empty state for cards */}
-            {filteredProjects.length === 0 && (
+            {paginatedProjects.length === 0 && (
               <div className="col-span-full text-center py-16">
                 <Building2 className="w-16 h-16 text-gray-300 mx-auto mb-4" />
                 <h3 className="text-lg font-semibold text-gray-900 mb-2">No projects found</h3>
