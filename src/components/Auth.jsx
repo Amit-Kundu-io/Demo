@@ -24,6 +24,7 @@ function OtpVerification() {
       setOtp(value);
     }
   };
+  
 
   return (
     <div className="min-h-screen w-full bg-gray-50 flex items-center justify-center p-6">
