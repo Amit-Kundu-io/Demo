@@ -1,13 +1,13 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import MainLayout from "../layouts/MainLayout";
-import Projects from "../features/Projects/Projects";
-import Settings from "../features/settings/Settings";
-import Team from "../features/Team_management/Team"
-import Approval from "../features/Approval/Approval";
-import CompanyDetails from "../features/Projects/CompanyDetails";
-import Login from "../Login/Login";
-import Signup from "../Sign in/SignIn";
-import Auth from "../components/Auth"
+import MainLayout from "../../layouts/MainLayout";
+import Projects from "../../features/Projects/Projects";
+import Settings from "../../features/settings/Settings";
+import Team from "../../features/Team_management/Team"
+import Approval from "../../features/Approval/Approval";
+import CompanyDetails from "../../features/Projects/CompanyDetails";
+import Login from "../../features/auth/Login/Login";
+import Signup from "../../features/auth/Sign in/SignIn";
+import Auth from "../../features/auth/otp/Auth"
 
 export default function AppRoutes() {
   return (

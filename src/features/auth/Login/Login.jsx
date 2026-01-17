@@ -102,6 +102,24 @@ function Login() {
               />
             </div>
 
+            <div>
+              <label className="block text-sm font-medium mb-1">Company name*</label>
+              <input
+                type="text"
+                className="w-full border rounded-lg p-2 focus:outline-none focus:ring"
+                placeholder="Your Company Name"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-1">Address*</label>
+              <input
+                type="text"
+                className="w-full border rounded-lg p-2 focus:outline-none focus:ring"
+                placeholder="Street Address"
+              />
+            </div>
+
             <div className="flex items-center gap-2">
               <input type="checkbox" />
               <p className="text-sm">I agree to Terms & Privacy Policy</p>

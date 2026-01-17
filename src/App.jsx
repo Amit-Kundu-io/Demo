@@ -5,11 +5,10 @@ import { useState } from "react";
 import Projects from "./features/Projects/Projects";
 import Settings from "./features/settings/Settings";
 import Team from "./features/Team_management/Team";
-import Approval from "./Approval/Approval";
+import Approval from "./features/Approval/Approval";
 import CompanyDetails from "./features/Projects/CompanyDetails";
-import Login from "./Login/Login"
-import { useState } from "react";
-import Signup from "./Sign in/SignIn";
+import Login from "./features/auth/Login/Login"
+import Signup from "./features/auth/Sign in/SignIn";
 
 function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
