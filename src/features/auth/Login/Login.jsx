@@ -1,136 +1,123 @@
 import { useEffect, useState } from "react";
 
 function Login() {
-  const slides = [
-    "img1.png",
-    "img2.jpg",
-    "img3.jpg",
-  ];
-
-  
+  const slides = ["/img1.png", "/img2.jpg", "/img3.jpg"];
   const [index, setIndex] = useState(0);
 
   useEffect(() => {
-    const interval = setInterval(() => {
+    const timer = setInterval(() => {
       setIndex((prev) => (prev + 1) % slides.length);
-    }, 3000);
-    return () => clearInterval(interval);
+    }, 3500);
+    return () => clearInterval(timer);
   }, []);
 
   return (
-    <div className="min-h-screen w-full bg-gray-50 flex items-center justify-center p-6">
-      <div className="w-full max-w-6xl bg-white rounded-3xl shadow-lg grid grid-cols-1 md:grid-cols-2 overflow-hidden">
-        {/* Left Slider Section */}
-        <div className="relative h-96 md:h-162.5 overflow-hidden">
-          <img
-            src={slides[index]}
-            alt={`Slide ${index + 1}`}
-            className="w-full h-full object-cover transition-all duration-700"
-          />
+    <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-slate-100 to-slate-200 px-4">
 
-          {/* Bottom gradient overlay to blend slides into the form area  */}
-          <div
-            className="absolute bottom-0 left-0 w-full h-36 z-10 pointer-events-none"
-            style={{ background: 'linear-gradient(0deg, rgba(0,0,0,0.45), rgba(0,0,0,0))' }}
-          />
+      {/* MAIN CARD */}
+      <div className="w-full max-w-4xl min-h-[540px] bg-white rounded-2xl shadow-2xl grid grid-cols-1 md:grid-cols-2 overflow-hidden">
 
-          {/* Pagination dots (centered) */}
-          <div className="absolute bottom-4 left-0 w-full z-20 flex justify-center items-center">
-            <div className="flex items-center gap-3">
-              {slides.map((_, i) => {
-                const isActive = i === index;
-                return (
-                  <button
-                    key={i}
-                    onClick={() => setIndex(i)}
-                    aria-label={`Go to slide ${i + 1}`}
-                    aria-pressed={isActive}
-                    className={`transition-all duration-200 focus:outline-none flex items-center justify-center ${
-                      isActive
-                        ? 'w-8 h-2 bg-white rounded-full shadow-lg'
-                        : 'w-2 h-2 bg-white/60 rounded-full'
-                    }`}
-                  />
-                );
-              })}
-            </div>
+        {/* LEFT – SLIDER (FULL HEIGHT) */}
+        <div className="relative h-full">
+          {slides.map((img, i) => (
+            <img
+              key={i}
+              src={img}
+              alt="slide"
+              className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-1000 ${
+                i === index ? "opacity-100" : "opacity-0"
+              }`}
+            />
+          ))}
+
+          {/* Overlay */}
+          <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+
+          {/* Text */}
+          <div className="absolute bottom-6 left-6 text-white max-w-xs">
+            <h2 className="text-2xl font-bold mb-1">
+              Welcome to Tendtrix
+            </h2>
+            <p className="text-xs opacity-90">
+              Manage your projects, teams and growth in one powerful platform.
+            </p>
+          </div>
+
+          {/* Dots */}
+          <div className="absolute bottom-3 w-full flex justify-center gap-2">
+            {slides.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => setIndex(i)}
+                className={`transition-all duration-300 ${
+                  index === i
+                    ? "w-6 h-2 bg-white rounded-full"
+                    : "w-2 h-2 bg-white/60 rounded-full"
+                }`}
+              />
+            ))}
           </div>
         </div>
 
-        {/* Right Form Section */}
-        <div className="p-10 flex flex-col justify-center bg-blue-300">
-          <h1 className="text-4xl font-bold mb-2 text-center font-serif">Tendtrix</h1>
-          <h1 className="text-3xl font-semibold mb-6">Create account</h1>
+        {/* RIGHT – FORM (FULL HEIGHT) */}
+        <div className="p-6 md:p-8 flex flex-col justify-center h-full bg-white">
+          <h1 className="text-3xl font-bold text-center mb-1 font-serif">
+            Tendtrix
+          </h1>
+          <p className="text-center text-gray-500 mb-6 text-sm">
+            Create your account
+          </p>
 
-          <form className="space-y-5">
-
-
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium mb-1">First name*</label>
-                <input
-                  type="text"
-                  className="w-full border rounded-lg p-2 focus:outline-none focus:ring"
-                  placeholder="Joxx"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-1">Last name*</label>
-                <input
-                  type="text"
-                  className="w-full border rounded-lg p-2 focus:outline-none focus:ring"
-                  placeholder="Doxx"
-                />
-              </div>
+          <form className="space-y-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <Input label="First name*" placeholder="John" />
+              <Input label="Last name*" placeholder="Doe" />
             </div>
 
-            <div>
-              <label className="block text-sm font-medium mb-1">Email*</label>
-              <input
-                type="email"
-                className="w-full border rounded-lg p-2 focus:outline-none focus:ring"
-                placeholder="abc@xyz.com"
-              />
+            <Input label="Work email*" type="email" placeholder="abc@xyz.com" />
+            <Input label="Mobile number*" placeholder="+91 98765 43210" />
+            <Input label="Company name*" placeholder="Your Company" />
+            <Input label="Address*" placeholder="Street Address" />
+
+            <div className="flex items-center gap-2 text-xs">
+              <input type="checkbox" className="accent-teal-600" />
+              <span>
+                I agree to the{" "}
+                <span className="text-teal-600 cursor-pointer">
+                  Terms & Privacy Policy
+                </span>
+              </span>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium mb-1">Mobile number*</label>
-              <input
-                type="text"
-                className="w-full border rounded-lg p-2 focus:outline-none focus:ring"
-                placeholder="+91 9876 XXX XXX"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium mb-1">Company name*</label>
-              <input
-                type="text"
-                className="w-full border rounded-lg p-2 focus:outline-none focus:ring"
-                placeholder="Your Company Name"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium mb-1">Address*</label>
-              <input
-                type="text"
-                className="w-full border rounded-lg p-2 focus:outline-none focus:ring"
-                placeholder="Street Address"
-              />
-            </div>
-
-            <div className="flex items-center gap-2">
-              <input type="checkbox" />
-              <p className="text-sm">I agree to Terms & Privacy Policy</p>
-            </div>
-
-            <button className="w-full bg-teal-600 text-white py-2 rounded-lg text-lg hover:bg-teal-700" >Next</button>
+            <button className="w-full bg-teal-600 hover:bg-teal-700 transition text-white py-2.5 rounded-lg font-semibold shadow-md">
+              Next
+            </button>
           </form>
 
-          <p className="mt-4 text-sm">Already have an account? <span className="text-teal-600 cursor-pointer">Sign in</span></p>
+          <p className="mt-4 text-center text-xs">
+            Already have an account?{" "}
+            <span className="text-teal-600 cursor-pointer font-medium">
+              Sign in
+            </span>
+          </p>
         </div>
       </div>
+    </div>
+  );
+}
+
+/* INPUT */
+function Input({ label, type = "text", placeholder }) {
+  return (
+    <div>
+      <label className="block text-xs font-medium mb-1">
+        {label}
+      </label>
+      <input
+        type={type}
+        placeholder={placeholder}
+        className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-teal-500"
+      />
     </div>
   );
 }

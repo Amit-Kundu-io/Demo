@@ -7,7 +7,7 @@ import Approval from "../../features/Approval/Approval";
 import CompanyDetails from "../../features/Projects/CompanyDetails";
 import Login from "../../features/auth/Login/Login";
 import Signup from "../../features/auth/Sign in/SignIn";
-import Auth from "../../features/auth/otp/Auth"
+import Auth from "../../features/auth/otp/Auth";
 
 export default function AppRoutes() {
   return (
